@@ -1,0 +1,16 @@
+[package]
+name = "sf"
+version = "0.1.0"
+edition = "2024"
+description = "Index-powered file search for macOS. Queries Spotlight instead of walking the filesystem."
+license = "MIT"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+ignore = "0.4"
+anyhow = "1"
+
+[dev-dependencies]
+assert_cmd = "2"
+predicates = "3"
+tempfile = "3"

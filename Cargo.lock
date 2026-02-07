@@ -452,7 +452,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "sf"
+name = "spotlight-find"
 version = "0.1.0"
 dependencies = [
  "anyhow",

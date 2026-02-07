@@ -437,8 +437,6 @@ fn global_fd_ignore_path() -> Option<PathBuf> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::hint::black_box;
-    use std::time::Instant;
     use tempfile::TempDir;
 
     fn filter_for_test(root: &Path, include_hidden: bool, ignore_enabled: bool) -> Filter {
@@ -615,58 +613,5 @@ mod tests {
 
         let mut f = filter_for_test_with_global_fd_ignore(root, true, false, "bar\n");
         assert!(f.should_include(&root.join("bar")));
-    }
-
-    // Micro-benchmark for the pruning emulation hot path. This is not a correctness test and
-    // is ignored by default.
-    //
-    // Run with:
-    //   cargo test microbench_walkable_cache -- --ignored --nocapture
-    #[test]
-    #[ignore]
-    fn microbench_walkable_cache() {
-        let tmp = TempDir::new().unwrap();
-        let base = tmp.path().join("base");
-
-        let mut f = Filter::new_with_globals(
-            FilterConfig {
-                cwd: tmp.path().to_path_buf(),
-                search_base: base.clone(),
-                include_hidden: true,
-                ignore_enabled: false,
-            },
-            Gitignore::empty(),
-            None,
-        );
-
-        // 100 directories, 1_000 files each -> 100k candidates.
-        let mut paths = Vec::with_capacity(100_000);
-        for d in 0..100 {
-            let dir = base.join(format!("d{d:03}")).join("nested").join("deeper");
-            for i in 0..1_000 {
-                paths.push(dir.join(format!("file{i:04}.txt")));
-            }
-        }
-
-        // First pass: fills caches.
-        let t0 = Instant::now();
-        for p in &paths {
-            black_box(f.is_walkable_to(p, false));
-        }
-        let dt1 = t0.elapsed();
-
-        // Second pass: pure cache hits.
-        let t1 = Instant::now();
-        for p in &paths {
-            black_box(f.is_walkable_to(p, false));
-        }
-        let dt2 = t1.elapsed();
-
-        eprintln!(
-            "walkable cache: pass1={:?} pass2={:?} cache_entries={}",
-            dt1,
-            dt2,
-            f.dir_walkable_cache.len()
-        );
     }
 }

@@ -25,8 +25,9 @@ sf -0 "*.rs" | xargs -0 rg "unsafe"  # safe piping (handles weird filenames)
 ```
 
 `pattern` is a glob if it contains `*` or `?`. Otherwise it’s treated as a
-substring match (equivalent to `*pattern*`). To list everything under a path,
-use `sf "*" /some/dir`.
+substring match (equivalent to `*pattern*`). Matching is fd-like smart-case:
+case-insensitive unless the pattern contains any uppercase character. To list
+everything under a path, use `sf "*" /some/dir`.
 
 ## How It Works
 

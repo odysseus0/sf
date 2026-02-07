@@ -9,7 +9,7 @@ rules (fd v10.3.0 behavior, high-ROI subset).
 ## Install
 
 ```bash
-cargo install sf
+cargo install spotlight-find
 ```
 
 ## Usage

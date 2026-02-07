@@ -1,9 +1,16 @@
 [package]
-name = "sf"
+name = "spotlight-find"
 version = "0.1.0"
 edition = "2024"
 description = "Index-powered file search for macOS. Queries Spotlight instead of walking the filesystem."
 license = "MIT"
+repository = "https://github.com/odysseus0/sf"
+readme = "README.md"
+default-run = "sf"
+
+[[bin]]
+name = "sf"
+path = "src/main.rs"
 
 [dependencies]
 clap = { version = "4", features = ["derive"] }
